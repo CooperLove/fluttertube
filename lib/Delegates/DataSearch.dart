@@ -38,7 +38,7 @@ class DataSearch extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     return query.isEmpty
         ? Container()
-        : FutureBuilder(
+        : FutureBuilder<List>(
             future: suggestions(query),
             builder: (context, snapshot) {
               return snapshot.hasData
@@ -48,7 +48,9 @@ class DataSearch extends SearchDelegate<String> {
                         return ListTile(
                           title: Text(snapshot.data[index]),
                           leading: Icon(Icons.play_arrow),
-                          onTap: () {},
+                          onTap: () {
+                            close(context, snapshot.data[index]);
+                          },
                         );
                       },
                     )

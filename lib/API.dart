@@ -7,7 +7,11 @@ import 'Models/Video.dart';
 const API_KEY = "AIzaSyC1FMY9icJ2hYzBUWT1d-B5Un6fgiUANrE";
 
 class Api {
-  void search(String search) async {
+  String _search;
+  String _nextPageToken;
+
+  Future search(String search) async {
+    _search = search;
     Uri url = Uri.https("www.googleapis.com", "youtube/v3/search", {
       'part': "snippet",
       'q': "$search",
@@ -18,14 +22,29 @@ class Api {
     // print(url);
     http.Response response = await http.get(url);
 
-    decode(response);
+    return decode(response);
+  }
+
+  Future nextPage() async {
+    Uri url = Uri.https("www.googleapis.com", "youtube/v3/search", {
+      'part': "snippet",
+      'q': "$_search",
+      'type': "video",
+      'key': "$API_KEY",
+      'maxResults': "10",
+      'pageToken': _nextPageToken
+    });
+    print(url);
+    http.Response response = await http.get(url);
+
+    return decode(response);
   }
 
   List<Video> decode(http.Response response) {
     // print(response.statusCode);
     if (response.statusCode == 200) {
       var decoded = jsonDecode(response.body);
-      // print(decoded);
+      _nextPageToken = decoded["nextPageToken"];
       List<Video> videos = decoded["items"].map<Video>((map) {
         return Video.fromJson(map);
       }).toList();
