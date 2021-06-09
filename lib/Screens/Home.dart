@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertube/Blocs/FavoriteBloc.dart';
 import 'package:fluttertube/Blocs/VideosBloc.dart';
 import 'package:fluttertube/Delegates/DataSearch.dart';
+import 'package:fluttertube/Screens/FavoritesScreen.dart';
 import 'package:fluttertube/Tiles/VideoTile.dart';
 
 class Home extends StatelessWidget {
@@ -36,7 +37,12 @@ class Home extends StatelessWidget {
                   return Text("0");
                 },
               )),
-          IconButton(icon: Icon(Icons.star), onPressed: () {}),
+          IconButton(
+              icon: Icon(Icons.star),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FavoritesScreen()));
+              }),
           IconButton(
               icon: Icon(Icons.search),
               onPressed: () async {
